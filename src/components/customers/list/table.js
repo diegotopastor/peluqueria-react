@@ -37,7 +37,7 @@ const Table = (props) => {
 					<button type='button' className='btn btn-primary btn-icon'>
 						<i className="far fa-calendar-alt"></i>
 					</button>
-					<Link to={`/app/custsomers/edit/`+element.ID} type='button' className='btn btn-success btn-icon mx-1'>
+					<Link to={`/app/customers/edit/`+element.ID} type='button' className='btn btn-success btn-icon mx-1'>
 						<i className="far fa-edit"></i>
 					</Link>
 					<button onClick={()=>deleteCustomer(element.ID)} type='button' className='btn btn-danger btn-icon'>

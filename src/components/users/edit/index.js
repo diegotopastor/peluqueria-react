@@ -58,35 +58,35 @@ const UsersEdit = (props) => {
 		(estado.status=="init"?
 			"Cargando..." :
 			<div className="row g-3">
-			<h2>Editar Usuario {props.idEdit}</h2>
-			{html}
-			<div className="col-md-6">
-				<label  className="form-label">Nombre</label>
-				<input type="text" className="form-control" defaultValue={estado.name} {...register("name")} />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Email</label>
-				<input type="email" className="form-control" defaultValue={estado.email} {...register("email")} />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Password</label>
-				<input type="password" className="form-control" id="pass" />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Confirmar Password</label>
-				<input type="password" className="form-control" id="confirm-pass" />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Tipo usuario</label>
-				<select className="form-select" {...register('rol')}>
-					<option value="administrator" selected={estado.rol=="administrator"&&"selected"} >Administrador</option>
-					<option value="employee" selected={estado.rol=="employee"&&"selected"} >Empleado</option>
-				</select>
-			</div>
-			<div className="col-12">
-				<button onClick={handleSubmit(editUser)} type="button" className="btn btn-primary">Guardar</button>
-			</div>
-		</div>)
+				<h2>Editar Usuario {props.idEdit}</h2>
+				{html}
+				<div className="col-md-6">
+					<label  className="form-label">Nombre</label>
+					<input type="text" className="form-control" defaultValue={estado.name} {...register("name")} />
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Email</label>
+					<input type="email" className="form-control" defaultValue={estado.email} {...register("email")} />
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Password</label>
+					<input type="password" className="form-control" id="pass" />
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Confirmar Password</label>
+					<input type="password" className="form-control" id="confirm-pass" />
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Tipo usuario</label>
+					<select className="form-select" {...register('rol')}>
+						<option value="administrator" selected={estado.rol=="administrator"&&"selected"} >Administrador</option>
+						<option value="employee" selected={estado.rol=="employee"&&"selected"} >Empleado</option>
+					</select>
+				</div>
+				<div className="col-12">
+					<button onClick={handleSubmit(editUser)} type="button" className="btn btn-primary">Guardar</button>
+				</div>
+			</div>)
 
 	);
 }

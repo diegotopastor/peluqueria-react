@@ -1,76 +1,101 @@
 import React, {useState, useEffect} from 'react';
+import { useForm } from "react-hook-form";
 import API from "../../../config/api";
 
-const Customers = () => {
+const CustomersEdit = (props) => {
 	
-	var [estado, cambiaEstado] = useState({customer:null, error:null});
-	var html = "";
+	let [estado, cambiaEstado] = useState({status:"init"});
+	const { register, handleSubmit } = useForm();
 
-	if(estado.customer===false){
-		var html = <div className="alert alert-danger">{estado.error}</div>;
-	}else if(estado.customer===true){
-		var html = <div className="alert alert-success">Guardado correctamente</div>;;
-	}
-
-	const addCustomer = () =>{
-		const name = document.getElementById("name").value;
-		const surname = document.getElementById("surname").value;
-		const email = document.getElementById("email").value;
-		const phone = document.getElementById("phone").value;
-		const notes = document.getElementById("notes").value;
-		const customerType = document.getElementById("customerType").value;
-
-		// PETICIÓN A LA API
-		API.post('customers/add', {name:name, surname:surname, email:email, phone:phone, notes:notes, customer_type:customerType})
-			.then(respuesta=>{
+	// RECUPERAMOS DATOS A MOSTRAR
+		useEffect(() =>{
+			API.get('customers/get/'+props.idEdit).then(respuesta=>{
 				if(respuesta.status){
-					cambiaEstado({customer:true});
+					cambiaEstado({
+						...estado,
+						status: "loaded",
+						name: respuesta.data.name,
+						surname: respuesta.data.surname,
+						phone: respuesta.data.phone,
+						email: respuesta.data.email,
+						customer_type: respuesta.data.customer_type,
+						notes: respuesta.data.notes
+					});
 				}else{
-					cambiaEstado({customer:false, error:respuesta.error});
+					// SI EXISTE ERROR
+					cambiaEstado({ ...estado, status: "error" });
 				}
 			});
+		},[]);
 
-	}
+	// CONTROL DE ERRORES
+		if(estado.status==="error"){
+			var html = <div className="alert alert-danger">Error al cargar datos</div>;
+		}else if(estado.status==="edited_KO"){
+			var html = <div className="alert alert-danger">Error al editar datos</div>;
+		}else if(estado.status==="edited_OK"){
+			var html = <div className="alert alert-success">Editado correctamente</div>;
+		}else{
+			var html = "";
+		}
+
+	// EDITAMOS CUSTOMER
+		const editCustomer = (datos) =>{
+
+			console.log(datos);
+
+			API.post('customers/edit/'+props.idEdit, datos)
+				.then(respuesta=>{
+					if(respuesta.status){
+						cambiaEstado({...estado, status: "edited_OK"});
+					}else{
+						cambiaEstado({...estado, status: "edited_KO"});
+					}
+				});
+
+		}
 	
 	return (
 		
-		<div className="row g-3">
-			<h2>Clientes</h2>
-			{html}
-			<div className="col-md-6">
-				<label className="form-label">Nombre</label>
-				<input type="text" className="form-control" id="name" />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Apellidos</label>
-				<input type="text" className="form-control" id="surname" />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Teléfono</label>
-				<input type="tel" className="form-control" id="phone" />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Email</label>
-				<input type="email" className="form-control" id="email" />
-			</div>
-			<div className="col-md-6">
-				<label className="form-label">Tipo cliente</label>
-				<select className="form-select" id="customerType">
-					<option value="new">Nuevo</option>
-					<option value="regular">Regular</option>
-					<option value="vip">VIP</option>
-				</select>
-			</div>
-			<div className="col-md-12">
-				<label  className="form-label">Notas</label>
-				<textarea className="form-control" id="notes" rows="3" id="notes"></textarea>
-			</div>
-			<div className="col-12">
-				<button onClick={addCustomer} type="button" className="btn btn-primary">Guardar</button>
-			</div>
-		</div>		
+		(estado.status=="init"?
+			"Cargando..." :
+			<div className="row g-3">
+				<h2>Editar Cliente</h2>
+				{html}
+				<div className="col-md-6">
+					<label className="form-label">Nombre</label>
+					<input type="text" className="form-control" defaultValue={estado.name} {...register("name")} />
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Apellidos</label>
+					<input type="text" className="form-control" defaultValue={estado.surname} {...register("surname")}/>
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Teléfono</label>
+					<input type="tel" className="form-control" defaultValue={estado.phone} {...register("phone")}/>
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Email</label>
+					<input type="email" className="form-control" defaultValue={estado.email} {...register("email")}/>
+				</div>
+				<div className="col-md-6">
+					<label className="form-label">Tipo cliente</label>
+					<select className="form-select" {...register("content-type")}>
+						<option value="new" selected={estado.content_type=="new"&&"selected"}>Nuevo</option>
+						<option value="regular" selected={estado.content_type=="regular"&&"selected"}>Regular</option>
+						<option value="vip" selected={estado.content_type=="vip"&&"selected"}>VIP</option>
+					</select>
+				</div>
+				<div className="col-md-12">
+					<label  className="form-label">Notas</label>
+					<textarea className="form-control" id="notes" rows="3" defaultValue={estado.notes} {...register("notes")}></textarea>
+				</div>
+				<div className="col-12">
+					<button onClick={handleSubmit(editCustomer)} type="button" className="btn btn-primary">Guardar</button>
+				</div>
+			</div>)		
 		
 	);
 }
 
-export default Customers;
+export default CustomersEdit;

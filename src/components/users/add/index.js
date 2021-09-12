@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import API from "../../../config/api";
 
 const UsersAdd = () => {
@@ -13,6 +13,7 @@ const UsersAdd = () => {
 	}
 
 	const addUser = () =>{
+		
 		const name = document.getElementById("name").value;
 		const email = document.getElementById("email").value;
 		const pass = document.getElementById("pass").value;		

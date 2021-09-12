@@ -7,8 +7,10 @@ import UsersAdd from '../../components/users/add';
 import UsersEdit from '../../components/users/edit';
 import UsersList from '../../components/users/list';
 import CustomersAdd from '../../components/customers/add';
+import CustomersEdit from '../../components/customers/edit';
 import CustomersList from '../../components/customers/list';
 import ItemsAdd from '../../components/items/add';
+import ItemsEdit from '../../components/items/edit';
 import ItemsList from '../../components/items/list';
 
 const App = (props) => {
@@ -28,11 +30,17 @@ const App = (props) => {
 		case "customers/add":
 			var componente = <CustomersAdd/>;
 			break;
+		case "customers/edit":
+			var componente = <CustomersEdit idEdit={props.match.params.id}/>;
+			break;
 		case "customers/get_list":
 			var componente = <CustomersList/>;
 			break;
 		case "items/add":
 			var componente = <ItemsAdd/>;
+			break;
+		case "items/edit":
+			var componente = <ItemsEdit idEdit={props.match.params.id}/>;
 			break;
 		case "items/get_list":
 			var componente = <ItemsList/>;
